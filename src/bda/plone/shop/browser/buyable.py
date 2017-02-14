@@ -7,6 +7,7 @@ from bda.plone.cart import get_item_data_provider
 from bda.plone.cart.browser import DataProviderMixin
 from bda.plone.shop import permissions
 from bda.plone.shop.interfaces import IBuyablePeriod
+from plone.memoize.view import memoize
 from datetime import datetime
 from decimal import Decimal
 from plone.uuid.interfaces import IUUID
@@ -18,14 +19,18 @@ from zope.i18n import translate
 class BuyableControls(BrowserView, DataProviderMixin):
 
     @property
+    @memoize
     def _cart_data(self):
         return get_data_provider(self.context, self.request)
 
+
     @property
+    @memoize
     def _item_data(self):
         return get_item_data_provider(self.context)
 
     @property
+    @memoize
     def _item_availability(self):
         return get_item_availability(self.context, self.request)
 
