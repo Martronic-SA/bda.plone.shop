@@ -15,23 +15,21 @@ from Products.Five import BrowserView
 from zope.component import queryAdapter
 from zope.i18n import translate
 
-
 class BuyableControls(BrowserView, DataProviderMixin):
 
-    @property
-    @memoize
-    def _cart_data(self):
+    def __init__(self, context, request):
+        super(BuyableControls, self).__init__(context, request)
+        self._cart_data = self.get_data_provider()
+        self._item_data = self.get_item_data_provider()
+        self._item_availability = self.get_item_availability()
+
+    def get_data_provider(self):
         return get_data_provider(self.context, self.request)
 
-
-    @property
-    @memoize
-    def _item_data(self):
+    def get_item_data_provider(self):
         return get_item_data_provider(self.context)
 
-    @property
-    @memoize
-    def _item_availability(self):
+    def get_item_availability(self):
         return get_item_availability(self.context, self.request)
 
     @property
